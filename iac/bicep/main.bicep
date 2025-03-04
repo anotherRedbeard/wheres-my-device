@@ -270,7 +270,7 @@ module cosmosDb 'br/public:avm/res/document-db/database-account:0.11.0' = {
 // ✅ Azure Function App (For Processing + API Layer)
 module functionApp 'br/public:avm/res/web/site:0.15.0' = {
   scope: resourceGroup(rgName)
-  dependsOn: [ resourceGroupResource, serverfarm, component, storage ]
+  dependsOn: [ resourceGroupResource ]
   name: 'functionAppDeployment'
   params: {
     kind: 'functionapp'
