@@ -64,10 +64,13 @@ Before you begin, ensure you have the following installed:
   - Log Analytics Workspace
   - Application Insights
   - Key Vault
+  - Storage Account
+  - Azure Function
+  - Static Web App
+  - Cosmos DB
 
 - **Command to deploy via bicep:**
 
     ```bash
-    az group create --name <resource-group-name> --location <location>
-    az deployment group create --resource-group <resource-group-name> --name wheres-my-device --parameters ./iac/bicep/main.dev.bicepparam
+    az deployment sub create --subscription <subscription-id> --location <location> --name dotnetcore-wheresmydevice-deploy --parameters ./iac/bicep/main.dev.bicepparam
     ```
