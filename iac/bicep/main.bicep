@@ -332,4 +332,3 @@ module staticWebApp 'br/public:avm/res/web/static-site:0.8.2' = {
 }
 
 output resourceGroupId string = resourceGroupResource.outputs.resourceId
-output NumberOfCapabilities string = capabilities.length
