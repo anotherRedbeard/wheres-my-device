@@ -253,16 +253,29 @@ module storage 'br/public:avm/res/storage/storage-account:0.8.0' = {
   }
 }
 
-resource cosmosDbExisting 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' existing = {
-  scope: resourceGroup(rgName)
-  name: cosmosDbAccountName
+resource cosmosDbCheck 'Microsoft.Resources/deploymentScripts@2022-08-01' = {
+  name: 'checkCosmosDbExists'
+  location: location
+  kind: 'AzureCLI'
+  properties: {
+    azCliVersion: '2.30.0'
+    timeout: 'PT5M'
+    retentionInterval: 'P1D'
+    scriptContent: '''
+      cosmosExists=$(az cosmosdb show --name ${cosmosDbAccountName} --resource-group ${rgName} --query "id" -o tsv || echo "notfound")
+      if [ "$cosmosExists" = "notfound" ]; then
+        echo "Cosmos DB does not exist"
+        echo "{\"cosmosExists\": false}" > $AZ_SCRIPTS_OUTPUT_PATH
+      else
+        echo "Cosmos DB exists"
+        echo "{\"cosmosExists\": true}" > $AZ_SCRIPTS_OUTPUT_PATH
+      fi
+    '''
+  }
 }
 
-// Workaround: Try to reference an existing property safely
-var isNewDeployment = cosmosDbExisting.properties != null ? false : true
-
 // Add EnableServerless only if the Cosmos DB account does not exist
-var capabilities = isNewDeployment ? [] : ['EnableServerless']
+var capabilities = cosmosDbCheck.properties.outputs.cosmosExists ? [] : ['EnableServerless']
 
 // ✅ Cosmos DB (for storing location history)
 module cosmosDb 'br/public:avm/res/document-db/database-account:0.11.0' = {
