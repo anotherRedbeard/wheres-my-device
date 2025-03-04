@@ -253,7 +253,8 @@ module storage 'br/public:avm/res/storage/storage-account:0.8.0' = {
   }
 }
 
-resource cosmosDbExisting 'Microsoft.DocumentDB/databaseAccounts@2023-03-01' existing = {
+resource cosmosDbExisting 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' existing = {
+  scope: resourceGroup(rgName)
   name: cosmosDbAccountName
 }
 
