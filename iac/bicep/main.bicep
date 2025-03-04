@@ -46,6 +46,12 @@ param storageAccountName string = '<storageAccountName>'
 @description('The name of the Cosmos DB account.')
 param cosmosDbAccountName string = '<cosmosDbAccountName>'
 
+@description('The name of the Cosmos DB container.')
+param cosmosContainerName string = '<cosmosContainerName>'
+
+@description('The name of the Cosmos DB database.')
+param cosmosIotDBName string = '<cosmosIotDBName>'
+
 @description('The name of the Static Web App.')
 param staticWebAppName string = '<staticWebAppName>'
 
@@ -164,6 +170,7 @@ module vault 'br/public:avm/res/key-vault/vault:0.7.1' = {
     // Non-required parameters
     enablePurgeProtection: false
     enableRbacAuthorization: true
+    publicNetworkAccess: 'Enabled'
     location: location
     roleAssignments: [
     ]
@@ -262,6 +269,19 @@ module cosmosDb 'br/public:avm/res/document-db/database-account:0.11.0' = {
     }
     capabilitiesToAdd: [
       'EnableServerless'
+    ]
+    sqlDatabases: [
+      {
+        name: cosmosIotDBName
+        containers: [
+          {
+            name: cosmosContainerName
+            paths: [
+              '/deviceId'
+            ]
+          }
+        ]
+      }
     ]
   }
 }

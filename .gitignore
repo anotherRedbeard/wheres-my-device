@@ -1,5 +1,12 @@
+# remove macos specific files
+.DS_Store
+
 # environment specific bicepparam files
 *.*.bicepparam
+
+# remove azurite files
+__**__
+__*__.json
 
 # Prerequisites
 *.d
