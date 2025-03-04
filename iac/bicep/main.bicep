@@ -253,6 +253,16 @@ module storage 'br/public:avm/res/storage/storage-account:0.8.0' = {
   }
 }
 
+resource cosmosDbExisting 'Microsoft.DocumentDB/databaseAccounts@2023-03-01' existing = {
+  name: cosmosDbAccountName
+}
+
+// Workaround: Try to reference an existing property safely
+var isNewDeployment = cosmosDbExisting.properties != null ? false : true
+
+// Add EnableServerless only if the Cosmos DB account does not exist
+var capabilities = isNewDeployment ? [] : ['EnableServerless']
+
 // ✅ Cosmos DB (for storing location history)
 module cosmosDb 'br/public:avm/res/document-db/database-account:0.11.0' = {
   scope: resourceGroup(rgName)
@@ -267,9 +277,7 @@ module cosmosDb 'br/public:avm/res/document-db/database-account:0.11.0' = {
     networkRestrictions: {
       publicNetworkAccess: 'Enabled'
     }
-    capabilitiesToAdd: [
-      'EnableServerless'
-    ]
+    capabilitiesToAdd: capabilities
     sqlDatabases: [
       {
         name: cosmosIotDBName
@@ -332,3 +340,6 @@ module staticWebApp 'br/public:avm/res/web/static-site:0.8.2' = {
     }
   }
 }
+
+output resourceGroupId string = resourceGroupResource.outputs.resourceId
+output NumberOfCapabilities string = capabilities.length
