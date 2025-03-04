@@ -31,5 +31,5 @@ jobs:
             --name dotnetcore-wheresmydevice-deploy \
             --template-file ./iac/bicep/main.bicep \
             --parameters subscriptionId=${{ secrets.AZURE_SUBSCRIPTION_ID }} \
-            --parameters resourceGroupName=${{ vars.AZURE_RESOURCE_GROUP }} \
+            --parameters rgName=${{ vars.AZURE_RESOURCE_GROUP }} \
             --parameters ./iac/bicep/main.bicepparam
