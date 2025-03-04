@@ -9,6 +9,8 @@ param rgName string = 'rgName'
 @description('Provide the location of all the resources.')
 param location string = 'location'
 
+param alternateLocation string = 'centralus'
+
 @description('The name of the event hub namespace.')
 param eventHubNS string = 'eventHubNS'
 
@@ -251,7 +253,7 @@ module cosmosDb 'br/public:avm/res/document-db/database-account:0.11.0' = {
   name: 'cosmosDbDeployment'
   params: {
     name: cosmosDbAccountName
-    location: location
+    location: alternateLocation
     defaultConsistencyLevel: 'Session'
     enableFreeTier: false
     enableMultipleWriteLocations: false
@@ -304,7 +306,7 @@ module staticWebApp 'br/public:avm/res/web/static-site:0.8.2' = {
   name: 'staticWebAppDeployment'
   params: {
     name: staticWebAppName
-    location: 'centralus'
+    location: alternateLocation
     appSettings: { 
       API_URL: 'https://${functionAppName}.azurewebsites.net'
     }
