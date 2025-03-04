@@ -300,11 +300,11 @@ module functionApp 'br/public:avm/res/web/site:0.15.0' = {
 // ✅ Azure Static Web App (For React Frontend)
 module staticWebApp 'br/public:avm/res/web/static-site:0.8.2' = {
   scope: resourceGroup(rgName)
-  dependsOn: [ resourceGroupResource, serverfarm, component, storage ]
+  dependsOn: [ resourceGroupResource ]
   name: 'staticWebAppDeployment'
   params: {
     name: staticWebAppName
-    location: location
+    location: 'centralus'
     appSettings: { 
       API_URL: 'https://${functionAppName}.azurewebsites.net'
     }
